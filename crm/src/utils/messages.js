@@ -1,3 +1,6 @@
 export default {
     'logout': 'Вы вышли из системы',
+    'auth/user-not-found': 'Пользователя с таким имейл не существует',
+    'auth/wrong-password': 'Пользователя с таким паролем не существует',
+    'auth/email-already-in-use': 'Такой имейл уже существует',
 }

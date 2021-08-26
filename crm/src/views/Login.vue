@@ -12,7 +12,7 @@
         >
         <label for="email">Email</label>
         <small class="helper-text invalid"
-        v-if="$v.email.$dirty && !$v.email.required"
+               v-if="$v.email.$dirty && !$v.email.required"
         >Поле не должно быть пустым</small>
         <small class="helper-text invalid"
                v-else-if="$v.email.$dirty && !$v.email.email"
@@ -31,7 +31,7 @@
         >Введите пароль</small>
         <small class="helper-text invalid"
                v-else-if="$v.password.$dirty && !$v.password.minLength"
-        >Пароль должен быть {{ $v.password.$params.minLength.min }} символов. Сейчас он {{password.length}}</small>
+        >Пароль должен быть {{ $v.password.$params.minLength.min }} символов. Сейчас он {{ password.length }}</small>
       </div>
     </div>
     <div class="card-action">
@@ -55,7 +55,7 @@
 
 
 <script>
-import {email, required, minLength } from 'vuelidate/lib/validators';
+import {email, minLength, required} from 'vuelidate/lib/validators';
 import messages from "@/utils/messages";
 
 
@@ -70,12 +70,12 @@ export default {
     password: {required, minLength: minLength(6)}
   },
   mounted() {
-    if (messages[this.$route.query.message]){
+    if (messages[this.$route.query.message]) {
       this.$message(messages[this.$route.query.message]);
     }
   },
   methods: {
-    submitHandler() {
+    async submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return
@@ -84,8 +84,12 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log(formData)
-      this.$router.push('/')
+      try {
+        await this.$store.dispatch('login', formData);
+        await this.$router.push('/')
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
