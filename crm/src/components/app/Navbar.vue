@@ -12,11 +12,9 @@
         <li>
           <a
               class="dropdown-trigger black-text"
-              href="#"
               data-target="dropdown"
               ref="dropdown"
-          >
-            USER NAME
+          >{{name}}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -50,6 +48,11 @@ export default {
     interval: null,
     dropdown: null
   }),
+  computed: {
+    name() {
+      return this.$store.getters.info.name
+    }
+  },
   mounted() {
     this.interval = setInterval(() => {
       this.date = new Date()
