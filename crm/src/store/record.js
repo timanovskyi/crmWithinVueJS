@@ -25,5 +25,15 @@ export default {
                 console.log(e)
             }
         },
+        async fetchRecordById({dispatch}, id) {
+            try {
+                const uid = await dispatch('getUid');
+                const database = getDatabase();
+                const record = (await get(ref(database, `/users/${uid}/records/${id}`))).val() || {};
+                return {...record, id}
+            } catch (e) {
+                console.log(e)
+            }
+        },
     }
 }
