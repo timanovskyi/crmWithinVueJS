@@ -5,7 +5,7 @@
     </div>
 
     <div class="history-chart">
-      <canvas></canvas>
+      <canvas ref="canvas"></canvas>
     </div>
 
     <Loader v-if="loading"></Loader>
@@ -28,9 +28,11 @@
 <script>
 import HistoryTable from "@/components/HistoryTable";
 import paginationMixin from "@/mixins/pagination.mixin";
+import {Pie} from 'vue-chartjs'
 
 export default {
   name: 'history',
+  extends: Pie,
   components: {HistoryTable},
   mixins: [paginationMixin],
   data: () => ({
@@ -42,20 +44,45 @@ export default {
       this.records = await this.$store.dispatch('fetchRecords');
       const temporaryCategories = await this.$store.dispatch('fetchCategories');
 
+      this.setup(temporaryCategories)
 
-      this.setupPagination(this.records.map(r => {
-        return {
-          ...r,
-          categoryName: temporaryCategories.find(c => c.id === r.categoryId).title,
-          typeClass: r.type === 'income' ? 'green' : 'red',
-          typeText: r.type === 'income' ? 'Доход' : 'Расход',
-
-        }
-      }))
       setTimeout(() => this.loading = false)
     } catch (e) {
       throw e
     }
   },
+  methods: {
+    getColor() {
+      return `#${Math.floor(Math.random()*16777215).toString(16)}`
+    },
+    setup(arr) {
+      this.setupPagination(this.records.map(r => {
+        return {
+          ...r,
+          categoryName: arr.find(c => c.id === r.categoryId).title,
+          typeClass: r.type === 'income' ? 'green' : 'red',
+          typeText: r.type === 'income' ? 'Доход' : 'Расход',
+        }
+      }))
+
+      this.renderChart({
+        labels: arr.map(s => s.title),
+        datasets: [
+          {
+            label: 'Расходы по катеориям',
+            data: arr.map(s => {
+              return this.records.reduce((total, r) => {
+                if (r.categoryId === s.id && r.type === 'outcome') {
+                  total += r.amount
+                }
+                return total
+              }, 0)
+            }),
+            backgroundColor: arr.map(() => this.getColor()),
+          }
+        ]
+      })
+    }
+  }
 }
 </script>
