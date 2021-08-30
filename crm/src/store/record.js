@@ -1,4 +1,4 @@
-import {getDatabase, push, ref} from "firebase/database";
+import {get, getDatabase, push, ref} from "firebase/database";
 
 export default {
     actions: {
@@ -13,6 +13,16 @@ export default {
             } catch (e) {
                 commit('setError', e);
                 throw e
+            }
+        },
+        async fetchRecords({dispatch}) {
+            try {
+                const uid = await dispatch('getUid');
+                const database = getDatabase();
+                const records = (await get(ref(database, `/users/${uid}/records`))).val() || {};
+                return Object.keys(records).map(key => ({...records[key], id: key}))
+            } catch (e) {
+                console.log(e)
             }
         },
     }

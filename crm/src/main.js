@@ -12,6 +12,7 @@ import { getAuth } from "firebase/auth";
 import "firebase/database";
 
 import dateFilter from "@/filters/date.filter";
+import tooltipDirective from "@/directives/tooltip.directive";
 import currencyFilter from "@/filters/currency.filter";
 import Vuelidate from 'vuelidate';
 
@@ -24,6 +25,7 @@ Vue.use(messagePlugin);
 Vue.use(Vuelidate);
 Vue.filter('date', dateFilter);
 Vue.filter('currency', currencyFilter);
+Vue.directive('tooltip', tooltipDirective)
 Vue.component('Loader', Loader);
 
 
