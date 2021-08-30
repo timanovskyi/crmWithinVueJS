@@ -1,4 +1,4 @@
-import {getDatabase, onValue, ref} from "firebase/database";
+import {getDatabase, onValue, ref, set} from "firebase/database";
 
 export default {
     state: {
@@ -26,7 +26,20 @@ export default {
             } catch (e) {
                 console.log(e)
             }
-        }
+        },
+        async updateInfo({dispatch, commit, getters}, value) {
+            try {
+                const uid = await dispatch('getUid');
+                const database = getDatabase();
+                const data = {...getters.info, ...value}
+                await set(ref(database, `/users/${uid}/info`), data)
+                commit('setInfo', data)
+            }
+            catch (e) {
+                commit('setError', e);
+                throw e
+            }
+        },
     },
     getters: {
         info: s => s.info

@@ -80,7 +80,6 @@ export default {
       this.noChanges = false;
     },
     current(v) {
-      console.log('watch', v);
       const {limit, title} = this.categories.find(s => s.id === v);
       this.limit = limit;
       this.title = title;
