@@ -16,6 +16,8 @@ import tooltipDirective from "@/directives/tooltip.directive";
 import currencyFilter from "@/filters/currency.filter";
 import Vuelidate from 'vuelidate';
 
+import Paginate from 'vuejs-paginate'
+
 import 'materialize-css/dist/js/materialize.min';
 import messagePlugin from './utils/message.plugin';
 
@@ -27,6 +29,7 @@ Vue.filter('date', dateFilter);
 Vue.filter('currency', currencyFilter);
 Vue.directive('tooltip', tooltipDirective)
 Vue.component('Loader', Loader);
+Vue.component('Paginate', Paginate);
 
 
 const firebaseConfig = {
